@@ -6,10 +6,122 @@
     <title>Animal Rescue</title>
 
     <link rel="stylesheet" href="./css/styles.css" />
+
+    <!-- Bootstrap CSS and JS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <h1>Animal Rescue</h1>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+      <div class="container-fluid px-2">
+        <a class="navbar-brand" href="#" id="navHome">Home</a>
+        <!-- Boton hamburguesa para mobil -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarOptions"
+          aria-controls="navbarOptions"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          id="navToggler"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Opciones plegables -->
+        <div class="collapse navbar-collapse" id="navbarOptions">
+          <div
+            class="ms-auto d-flex flex-column flex-lg-row align-items-lg-center"
+          >
+            <div
+              class="d-flex flex-column flex-lg-row align-items-lg-center mb-2 mb-lg-0"
+            >
+              <select
+                class="form-select w-100 w-lg-auto mb-2 mb-lg-0 me-lg-2"
+                id="filterTipoAnimal"
+              >
+                <option selected>Tipo de animal</option>
+                <option value="1">Perro</option>
+                <option value="2">Gato</option>
+                <option value="3">Ave</option>
+              </select>
+              <select
+                class="form-select w-100 w-lg-auto ms-lg-2"
+                id="filterEstado"
+              >
+                <option selected>Estado</option>
+                <option value="1">Disponible</option>
+                <option value="2">Adoptado</option>
+                <option value="3">En tratamiento</option>
+              </select>
+            </div>
+            <a
+              class="btn btn-outline-primary ms-lg-3 mt-2 mt-lg-0"
+              href="#"
+              id="navAdminPanel"
+              >Panel de administración</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-    <script src="./js/script.js"></script>
+    <!-- Main: Cards -->
+    <main class="container-fluid px-2 mb-5">
+      <div
+        class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"
+        id="cardsContainer"
+      >
+        <div class="col" id="cardRockyCol">
+          <div class="card h-100" id="cardRocky">
+            <img
+              src="https://placedog.net/301/200"
+              class="card-img-top"
+              alt="Animal 4"
+              id="cardRockyImg"
+            />
+            <div class="card-body" id="cardRockyBody">
+              <h5 class="card-title" id="cardRockyTitle">Rocky</h5>
+              <p class="card-text" id="cardRockyDesc">
+                Perro, 4 años. Protector y fiel.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-auto">
+      <div class="container text-center">
+        <div class="mb-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm mx-1">
+            <i class="bi bi-facebook"></i> Facebook
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm mx-1">
+            <i class="bi bi-twitter"></i> Twitter
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm mx-1">
+            <i class="bi bi-instagram"></i> Instagram
+          </button>
+        </div>
+        <div class="mb-2">
+          <a href="#" class="me-2 text-decoration-none">CONTACTANOS</a>
+          |
+          <a href="#" class="ms-2 text-decoration-none">DONAR</a>
+        </div>
+        <div class="text-muted small">© 2025 Carlos David A. Mendoza</div>
+      </div>
+    </footer>
   </body>
 </html>
