@@ -12,6 +12,25 @@ export const getAllPersonas = async (req, res) => {
   }
 };
 
+export const getPersonaById = async (req, res) => {
+  const { id } = req.params;
+  const sql =
+    "select id, dni, nombre, telefono, direccion, fecha_registro, id_rol, ruta_archivo, ruta_imagen from personas WHERE id = ?;";
+
+  try {
+    const [personas] = await db.query(sql, [id]);
+
+    if (personas.length == 0) {
+      return res.status(404).json({ message: "No encontramos a la personas" });
+    }
+
+    res.status(200).json(personas[0]);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error Interno en el Servidor" });
+  }
+};
+
 export const savePersona = async (req, res) => {
   const {
     nombre,
