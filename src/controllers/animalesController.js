@@ -1,8 +1,8 @@
 import db from "../db/db.js";
 
-export const getAllPersonas = async (req, res) => {
+export const getAllAnimals = async (req, res) => {
   const sql =
-    "select id, nombre, telefono, direccion, fecha_registro, id_rol, ruta_archivo, ruta_imagen from personas;";
+    "select id, nombre, especie, edad, estado_salud, fecha_rescate, adoptado, ruta_archivo, ruta_imagen, observaciones from animales;";
   try {
     const [rows] = await db.query(sql);
     res.json(rows);
