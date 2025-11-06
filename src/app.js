@@ -17,6 +17,7 @@ app.use(
 );
 
 const PORT = process.env.PORT || 3000;
+app.use(express.json());
 
 app.use("/api/personas", personasRouter);
 app.use("/api/animales", animalesRouter);
