@@ -11,3 +11,50 @@ export const getAllProcess = async (req, res) => {
     res.status(500).json({ message: "Error al obtener los datos" });
   }
 };
+
+export const saveProcess = async (req, res) => {
+  const {
+    tipo,
+    id_persona,
+    id_animal,
+    es_nueva_persona,
+    observaciones,
+    ruta_archivo,
+    ruta_imagen,
+  } = req.body;
+
+  if (
+    !tipo ||
+    !id_persona ||
+    !id_animal ||
+    !es_nueva_persona ||
+    !observaciones ||
+    !ruta_archivo ||
+    !ruta_imagen
+  ) {
+    return res.status(400).json({ message: "Falta completar los campos" });
+  }
+
+  const sql =
+    "INSERT INTO procesos (tipo, id_persona, id_animal, es_nueva_persona, observaciones, ruta_archivo, ruta_imagen) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+  try {
+    const [result] = await db.query(sql, [
+      tipo,
+      id_persona,
+      id_animal,
+      es_nueva_persona,
+      observaciones,
+      ruta_archivo,
+      ruta_imagen,
+    ]);
+
+    res.status(201).json({
+      id: result.insertId,
+      message: "Registrado correctamente",
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error Interno en el Servidor" });
+  }
+};
