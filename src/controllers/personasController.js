@@ -77,3 +77,30 @@ export const savePersona = async (req, res) => {
     res.status(500).json({ message: "Error Interno en el Servidor" });
   }
 };
+
+export const deletePersona = async (req, res) => {
+  const { id } = req.params;
+  const connection = await db.getConnection();
+
+  try {
+    await connection.beginTransaction();
+
+    const sqlProcesos = "DELETE FROM procesos WHERE id_persona = ?";
+    await connection.query(sqlProcesos, [id]);
+
+    const sqlPersona = "DELETE FROM personas WHERE id = ?";
+    const [result] = await connection.query(sqlPersona, [id]);
+
+    if (result.affectedRows === 0) {
+      await connection.rollback();
+      return res.status(404).json({ message: "Persona no encontrada" });
+    }
+
+    await connection.commit();
+    res.status(200).json({ message: "Persona eliminada correctamente" });
+  } catch (error) {
+    await connection.rollback();
+    console.error(error);
+    res.status(500).json({ message: "Error al eliminar la persona" });
+  }
+};
