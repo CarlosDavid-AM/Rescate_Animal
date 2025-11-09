@@ -78,6 +78,56 @@ export const savePersona = async (req, res) => {
   }
 };
 
+export const updatePersona = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [currentRows] = await db.query(
+      "SELECT * FROM personas WHERE id = ?",
+      [id]
+    );
+
+    if (currentRows.length === 0) {
+      return res.status(404).json({ message: "Persona no encontrada" });
+    }
+    const currentPersona = currentRows[0];
+
+    const {
+      nombre = currentPersona.nombre,
+      dni = currentPersona.dni,
+      telefono = currentPersona.telefono,
+      direccion = currentPersona.direccion,
+      id_rol = currentPersona.id_rol,
+      ruta_archivo = currentPersona.ruta_archivo,
+      ruta_imagen = currentPersona.ruta_imagen,
+    } = req.body;
+
+    const sql =
+      "UPDATE personas SET nombre = ?, dni = ?, telefono = ?, direccion = ?, id_rol = ?, ruta_archivo = ?, ruta_imagen = ? WHERE id = ?";
+
+    await db.query(sql, [
+      nombre,
+      dni,
+      telefono,
+      direccion,
+      id_rol,
+      ruta_archivo,
+      ruta_imagen,
+      id,
+    ]);
+
+    res.status(200).json({ message: "Persona actualizada correctamente" });
+  } catch (e) {
+    console.error(e);
+    if (e.code === "ER_DUP_ENTRY") {
+      return res
+        .status(409)
+        .json({ message: `Error: El DNI '${req.body.dni}' ya está en uso.` });
+    }
+    res.status(500).json({ message: "Error Interno en el Servidor" });
+  }
+};
+
 export const deletePersona = async (req, res) => {
   const { id } = req.params;
   const connection = await db.getConnection();
