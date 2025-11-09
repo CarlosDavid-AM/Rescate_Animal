@@ -84,3 +84,30 @@ export const saveAnimal = async (req, res) => {
     res.status(500).json({ message: "Error Interno en el Servidor" });
   }
 };
+
+export const deleteAnimal = async (req, res) => {
+  const { id } = req.params;
+  const connection = await db.getConnection();
+
+  try {
+    await connection.beginTransaction();
+
+    const sqlProcesos = "DELETE FROM procesos WHERE id_animal = ?";
+    await connection.query(sqlProcesos, [id]);
+
+    const sqlAnimal = "DELETE FROM animales WHERE id = ?";
+    const [result] = await connection.query(sqlAnimal, [id]);
+
+    if (result.affectedRows === 0) {
+      await connection.rollback();
+      return res.status(404).json({ message: "Animal no encontrado" });
+    }
+
+    await connection.commit();
+    res.status(200).json({ message: "Animal eliminado correctamente" });
+  } catch (error) {
+    await connection.rollback();
+    console.error(error);
+    res.status(500).json({ message: "Error al eliminar el animal" });
+  }
+};
