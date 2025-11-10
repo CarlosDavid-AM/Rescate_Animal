@@ -85,6 +85,55 @@ export const saveAnimal = async (req, res) => {
   }
 };
 
+export const updateAnimal = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [currentRows] = await db.query(
+      "SELECT * FROM animales WHERE id = ?",
+      [id]
+    );
+
+    if (currentRows.length === 0) {
+      return res.status(404).json({ message: "Animal no encontrado" });
+    }
+    const currentAnimal = currentRows[0];
+
+    const {
+      nombre = currentAnimal.nombre,
+      especie = currentAnimal.especie,
+      edad = currentAnimal.edad,
+      estado_salud = currentAnimal.estado_salud,
+      fecha_rescate = currentAnimal.fecha_rescate,
+      adoptado = currentAnimal.adoptado,
+      ruta_archivo = currentAnimal.ruta_archivo,
+      ruta_imagen = currentAnimal.ruta_imagen,
+      observaciones = currentAnimal.observaciones,
+    } = req.body;
+
+    const sql =
+      "UPDATE animales SET nombre = ?, especie = ?, edad = ?, estado_salud = ?, fecha_rescate = ?, adoptado = ?, ruta_archivo = ?, ruta_imagen = ?, observaciones = ? WHERE id = ?";
+
+    await db.query(sql, [
+      nombre,
+      especie,
+      edad,
+      estado_salud,
+      fecha_rescate,
+      adoptado,
+      ruta_archivo,
+      ruta_imagen,
+      observaciones,
+      id,
+    ]);
+
+    res.status(200).json({ message: "Animal actualizado correctamente" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error Interno en el Servidor" });
+  }
+};
+
 export const deleteAnimal = async (req, res) => {
   const { id } = req.params;
   const connection = await db.getConnection();
