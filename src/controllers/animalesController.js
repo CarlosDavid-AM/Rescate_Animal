@@ -160,3 +160,37 @@ export const deleteAnimal = async (req, res) => {
     res.status(500).json({ message: "Error al eliminar el animal" });
   }
 };
+
+export const uploadAnimalImage = async (req, res) => {
+  const { id } = req.params;
+
+  if (!req.file) {
+    return res
+      .status(400)
+      .json({ message: "No se subió ningún archivo de imagen." });
+  }
+
+  const imagePath = req.file.path;
+  const sql = "UPDATE animales SET ruta_imagen = ? WHERE id = ?";
+
+  try {
+    const [result] = await db.query(sql, [imagePath, id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Animal no encontrado." });
+    }
+
+    res.status(200).json({
+      message: "Imagen subida y ruta actualizada correctamente.",
+      filePath: imagePath,
+    });
+  } catch (e) {
+    console.error(e);
+    res
+      .status(500)
+      .json({
+        message:
+          "Error Interno en el Servidor al actualizar la ruta de la imagen.",
+      });
+  }
+};

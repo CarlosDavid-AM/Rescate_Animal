@@ -140,3 +140,32 @@ export const deleteProcess = async (req, res) => {
     res.status(500).json({ message: "Error al eliminar el proceso" });
   }
 };
+
+export const uploadProcessPdf = async (req, res) => {
+  const { id } = req.params;
+
+  if (!req.file) {
+    return res.status(400).json({ message: "No se subió ningún archivo PDF." });
+  }
+
+  const pdfPath = req.file.path;
+  const sql = "UPDATE procesos SET ruta_archivo = ? WHERE id = ?";
+
+  try {
+    const [result] = await db.query(sql, [pdfPath, id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Proceso no encontrado." });
+    }
+
+    res.status(200).json({
+      message: "PDF subido y ruta actualizada correctamente.",
+      filePath: pdfPath,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      message: "Error Interno en el Servidor al actualizar la ruta del PDF.",
+    });
+  }
+};
