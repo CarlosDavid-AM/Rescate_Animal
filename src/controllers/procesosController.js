@@ -78,6 +78,51 @@ export const saveProcess = async (req, res) => {
   }
 };
 
+export const updateProcess = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [currentRows] = await db.query(
+      "SELECT * FROM procesos WHERE id = ?",
+      [id]
+    );
+
+    if (currentRows.length === 0) {
+      return res.status(404).json({ message: "Proceso no encontrado" });
+    }
+    const currentProcess = currentRows[0];
+
+    const {
+      tipo = currentProcess.tipo,
+      id_persona = currentProcess.id_persona,
+      id_animal = currentProcess.id_animal,
+      es_nueva_persona = currentProcess.es_nueva_persona,
+      observaciones = currentProcess.observaciones,
+      ruta_archivo = currentProcess.ruta_archivo,
+      ruta_imagen = currentProcess.ruta_imagen,
+    } = req.body;
+
+    const sql =
+      "UPDATE procesos SET tipo = ?, id_persona = ?, id_animal = ?, es_nueva_persona = ?, observaciones = ?, ruta_archivo = ?, ruta_imagen = ? WHERE id = ?";
+
+    await db.query(sql, [
+      tipo,
+      id_persona,
+      id_animal,
+      es_nueva_persona,
+      observaciones,
+      ruta_archivo,
+      ruta_imagen,
+      id,
+    ]);
+
+    res.status(200).json({ message: "Proceso actualizado correctamente" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error Interno en el Servidor" });
+  }
+};
+
 export const deleteProcess = async (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM procesos WHERE id = ?";
